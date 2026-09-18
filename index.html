@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Track your daily expenses and understand your spending habits with Expense & Budget Visualizer."
+    />
+    <title>Expense &amp; Budget Visualizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+      defer
+    ></script>
+    <script src="js/script.js" defer></script>
+  </head>
+  <body>
+    <!-- ============ HEADER ============ -->
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="header-text">
+          <h1>Expense &amp; Budget Visualizer</h1>
+          <p class="subtitle">
+            Track your daily expenses and understand your spending habits.
+          </p>
+        </div>
+        <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle dark mode"
+          aria-pressed="false"
+        >
+          <span class="theme-icon" aria-hidden="true" data-icon="moon"></span>
+        </button>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- ============ DASHBOARD CARDS ============ -->
+      <section class="dashboard-grid" aria-label="Dashboard summary">
+        <!-- Total balance card -->
+        <article class="card stat-card stat-card--balance">
+          <div class="stat-top">
+            <span class="icon-tile icon-tile--brand" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1" />
+                <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" />
+                <path d="M21 9h-5a2 2 0 0 0 0 4h5a1 1 0 0 0 1-1V10a1 1 0 0 0-1-1Z" />
+              </svg>
+            </span>
+            <span class="stat-label">TOTAL BALANCE</span>
+          </div>
+          <span id="total-balance" class="stat-value">Rp 0</span>
+          <span id="balance-hint" class="stat-hint">0 transactions recorded</span>
+        </article>
+
+        <!-- Monthly summary card -->
+        <article class="card stat-card stat-card--monthly">
+          <div class="stat-top">
+            <span class="icon-tile icon-tile--analytic" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+                <path d="M7 15l3.5-3.5 3 3L20 8" />
+                <path d="M20 12V8h-4" />
+              </svg>
+            </span>
+            <span class="stat-label">MONTHLY SPENDING</span>
+          </div>
+          <span id="monthly-total" class="stat-value">Rp 0</span>
+          <span id="monthly-category" class="stat-hint"
+            >Highest Category: &mdash;</span
+          >
+        </article>
+      </section>
+
+      <!-- ============ ADD TRANSACTION FORM ============ -->
+      <section class="card form-card" aria-label="Add transaction">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Add Transaction</h2>
+            <p class="card-subtitle">Record a new expense to your ledger.</p>
+          </div>
+        </div>
+
+        <p id="environment-notice" class="environment-notice" hidden>
+          This preview is running from a local file. For the full experience, serve
+          the project through Live Server, localhost, or GitHub Pages.
+        </p>
+
+        <form id="transaction-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="item-name">Item Name</label>
+              <input
+                type="text"
+                id="item-name"
+                name="itemName"
+                placeholder="e.g. Coffee"
+                autocomplete="off"
+                maxlength="60"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="amount">Amount</label>
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                placeholder="e.g. 50000"
+                min="1"
+                step="any"
+                inputmode="decimal"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="category">Category</label>
+              <div class="select-wrap">
+                <select id="category" name="category">
+                  <option value="" disabled selected>Select category</option>
+                  <option value="Food">Food</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Fun">Fun</option>
+                </select>
+                <span class="select-chevron" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group form-group--action">
+              <button type="submit" class="btn btn-primary">
+                <span class="btn-icon" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 5v14" />
+                    <path d="M5 12h14" />
+                  </svg>
+                </span>
+                Add Transaction
+              </button>
+            </div>
+          </div>
+
+          <p
+            id="form-message"
+            class="form-message"
+            role="alert"
+            aria-live="polite"
+          ></p>
+        </form>
+      </section>
+
+      <!-- ============ LIST + CHART ============ -->
+      <section class="content-grid">
+        <!-- Transaction list -->
+        <article class="card list-card" aria-label="Transaction history">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Transaction History</h2>
+              <p class="card-subtitle">Your most recent recorded expenses.</p>
+            </div>
+            <div class="sort-wrapper">
+              <label for="sort-select" class="sr-only">Sort transactions</label>
+              <div class="select-wrap select-wrap--sm">
+                <select id="sort-select" class="sort-select">
+                  <option value="latest">Latest</option>
+                  <option value="highest">Highest Amount</option>
+                  <option value="lowest">Lowest Amount</option>
+                </select>
+                <span class="select-chevron" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <ul id="transaction-list" class="transaction-list"></ul>
+          <div id="empty-state" class="empty-state">
+            <span class="empty-state__icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+                <path d="M8 11h8" />
+                <path d="M8 15h5" />
+              </svg>
+            </span>
+            <p class="empty-state__title">No transactions yet</p>
+            <p class="empty-state__text">
+              Start tracking your expenses by adding your first transaction.
+            </p>
+          </div>
+        </article>
+
+        <!-- Chart -->
+        <article
+          class="card chart-card"
+          aria-label="Spending by category chart"
+        >
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Spending by Category</h2>
+              <p class="card-subtitle">Distribution across your categories.</p>
+            </div>
+            <dl class="chart-meta">
+              <div class="chart-meta__item">
+                <dt>Transactions</dt>
+                <dd id="chart-count">0</dd>
+              </div>
+              <div class="chart-meta__item">
+                <dt>Top Category</dt>
+                <dd id="chart-top">&mdash;</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="chart-wrapper">
+            <canvas
+              id="spending-chart"
+              role="img"
+              aria-label="Pie chart of spending by category"
+            ></canvas>
+          </div>
+          <div id="chart-empty" class="empty-state empty-state--inline">
+            <p class="empty-state__text">
+              Add transactions to see your spending distribution.
+            </p>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>
+        Expense &amp; Budget Visualizer &mdash; Built with HTML, CSS &amp;
+        Vanilla JavaScript.
+      </p>
+    </footer>
+  </body>
+</html>
